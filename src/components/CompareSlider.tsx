@@ -49,8 +49,6 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
     if (!draggingRef.current) {
       return;
     }
-    // Prevent default to stop scrolling on some browsers if touch-action fails
-    event.preventDefault(); 
     updateFromClientX(event.clientX);
   };
 
@@ -87,6 +85,7 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
         style={aspectStyle}
       >
         <img className="reference" src={imageUrl} alt="原图" draggable={false} />

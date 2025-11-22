@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 192.168.31.79",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "gen-luts": "node scripts/generate-luts.js"

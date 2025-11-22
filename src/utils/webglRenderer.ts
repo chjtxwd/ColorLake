@@ -69,7 +69,15 @@ export class LUTCanvasRenderer {
   private uniformLocations: { image: WebGLUniformLocation | null; lut: WebGLUniformLocation | null; lutSize: WebGLUniformLocation | null };
 
   constructor(private canvas: HTMLCanvasElement | OffscreenCanvas) {
-    const gl = canvas.getContext('webgl') as WebGLRenderingContext;
+    const gl = canvas.getContext('webgl', {
+      preserveDrawingBuffer: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      alpha: true,
+      premultipliedAlpha: false,
+      failIfMajorPerformanceCaveat: false
+    }) as WebGLRenderingContext;
     if (!gl) {
       throw new Error('当前浏览器不支持 WebGL');
     }
@@ -228,16 +236,20 @@ export class LUTCanvasRenderer {
     const { gl } = this;
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.imageTexture);
-    // ImageBitmap and OffscreenCanvas are already top-down, so we don't need to flip
-    // But HTMLImageElement usually needs flipping in WebGL
-    // However, for consistency in our pipeline (Worker -> ImageBitmap), let's disable flip
-    // and handle coordinates in shader or assume input is correct.
-    // Actually, ImageBitmap is usually Y-down (standard image), WebGL is Y-up.
-    // If we see it flipped, we should toggle this.
-    // User says it's flipped (upside down), so we should probably turn OFF UNPACK_FLIP_Y_WEBGL
-    // or change the texture coordinates.
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0); 
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
+    
+    try {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      
+      // Check for WebGL errors (memory allocation failure on iOS)
+      const error = gl.getError();
+      if (error !== gl.NO_ERROR) {
+        throw new Error(`WebGL纹理创建失败 (错误代码: ${error})`);
+      }
+    } catch (err) {
+      console.error('纹理上传失败:', err);
+      throw new Error('图片处理失败，可能是内存不足');
+    }
   }
 
   private pushLUT(lut: LUTData): void {

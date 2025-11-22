@@ -70,7 +70,8 @@ export default function App() {
       await exportProcessedImage(activeImage, selectedLut);
     } catch (error) {
       console.error('Export failed:', error);
-      alert('导出失败，请重试');
+      const errorMessage = error instanceof Error ? error.message : '未知错误';
+      alert(`导出失败: ${errorMessage}\n\n如果图片过大，请尝试使用较小的图片。`);
     } finally {
       setIsProcessing(false);
     }
