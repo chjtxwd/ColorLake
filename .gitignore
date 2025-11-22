@@ -127,4 +127,6 @@ Thumbs.db
 # User requested ignores
 scripts/3dlut-creator
 scripts/sample
-LUTS
+/LUTS
+
+dist.zip
