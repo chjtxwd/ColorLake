@@ -14,6 +14,7 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
   const [value, setValue] = useState(50);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
+  const rectRef = useRef<DOMRect | null>(null);
   const aspectStyle = imageWidth > 0 && imageHeight > 0
     ? { aspectRatio: `${imageWidth} / ${imageHeight}` }
     : undefined;
@@ -21,11 +22,14 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
   const clampPercent = useCallback((next: number) => Math.min(100, Math.max(0, next)), []);
 
   const updateFromClientX = useCallback((clientX: number) => {
-    const stage = stageRef.current;
-    if (!stage) {
+    // Use cached rect if dragging, otherwise get fresh one
+    const rect = draggingRef.current && rectRef.current 
+      ? rectRef.current 
+      : stageRef.current?.getBoundingClientRect();
+
+    if (!rect) {
       return;
     }
-    const rect = stage.getBoundingClientRect();
     const percent = ((clientX - rect.left) / rect.width) * 100;
     setValue(clampPercent(percent));
   }, [clampPercent]);
@@ -33,7 +37,11 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     draggingRef.current = true;
-    stageRef.current?.setPointerCapture(event.pointerId);
+    // Cache rect on start
+    if (stageRef.current) {
+      rectRef.current = stageRef.current.getBoundingClientRect();
+      stageRef.current.setPointerCapture(event.pointerId);
+    }
     updateFromClientX(event.clientX);
   };
 
@@ -41,6 +49,8 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
     if (!draggingRef.current) {
       return;
     }
+    // Prevent default to stop scrolling on some browsers if touch-action fails
+    event.preventDefault(); 
     updateFromClientX(event.clientX);
   };
 
@@ -49,6 +59,7 @@ export function CompareSlider({ imageUrl, imageWidth, imageHeight, lut }: Props)
       return;
     }
     draggingRef.current = false;
+    rectRef.current = null;
     try {
       stageRef.current?.releasePointerCapture(event.pointerId);
     } catch (error) {

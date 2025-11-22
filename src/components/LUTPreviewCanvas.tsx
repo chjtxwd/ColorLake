@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import type { LUTMeta } from '../types';
 import { previewWorkerManager } from '../utils/previewWorkerManager';
 
@@ -8,7 +8,7 @@ interface Props {
   highQuality?: boolean;
 }
 
-export function LUTPreviewCanvas({ imageUrl, lut, highQuality = false }: Props) {
+export const LUTPreviewCanvas = memo(function LUTPreviewCanvas({ imageUrl, lut, highQuality = false }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -75,4 +75,4 @@ export function LUTPreviewCanvas({ imageUrl, lut, highQuality = false }: Props) 
       <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
     </div>
   );
-}
+});

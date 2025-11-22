@@ -337,7 +337,8 @@ main {
   .app-shell {
     padding: 0;
     gap: 0;
-    height: 100vh;
+    height: 100vh; /* Fallback */
+    height: 100dvh;
     overflow: hidden;
     background: #000;
   }
