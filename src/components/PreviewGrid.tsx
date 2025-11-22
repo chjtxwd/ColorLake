@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import type { LUTMeta } from '../types';
 import { LUTPreviewCanvas } from './LUTPreviewCanvas';
 import { Pagination } from './Pagination';
@@ -12,6 +12,14 @@ interface Props {
 
 const PAGE_SIZE = 12;
 
+const BRAND_SHORTNAMES: Record<string, string> = {
+  'Fujifilm': 'Fuji',
+  'NIKON': 'Nikon',
+  'Ricoh': 'Ricoh',
+  'Sony': 'Sony',
+  'Landscape': 'Land',
+};
+
 export function PreviewGrid({ imageUrl, luts, selectedId, onSelect }: Props) {
   // Group by category
   const categories = useMemo(() => {
@@ -23,6 +31,15 @@ export function PreviewGrid({ imageUrl, luts, selectedId, onSelect }: Props) {
     });
     return groups;
   }, [luts]);
+
+  const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const scrollToCategory = (cat: string) => {
+    const el = categoryRefs.current[cat];
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   // State for expanded categories and their pages
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
@@ -50,6 +67,18 @@ export function PreviewGrid({ imageUrl, luts, selectedId, onSelect }: Props) {
 
   return (
     <div className="preview-grid-container">
+      <div className="mobile-category-nav">
+        {Object.keys(categories).map(cat => (
+          <button 
+            key={cat} 
+            onClick={() => scrollToCategory(cat)}
+            className="nav-pill"
+          >
+            {BRAND_SHORTNAMES[cat] || cat.slice(0, 4)}
+          </button>
+        ))}
+      </div>
+
       {Object.entries(categories).map(([category, categoryLuts]) => {
         const isExpanded = expanded[category] ?? true;
         const page = pages[category] || 0;
@@ -58,7 +87,13 @@ export function PreviewGrid({ imageUrl, luts, selectedId, onSelect }: Props) {
         const visibleLuts = categoryLuts.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
         return (
-          <div key={category} className="category-section">
+          <div 
+            key={category} 
+            className="category-section"
+            ref={el => {
+              if (el) categoryRefs.current[category] = el;
+            }}
+          >
             <button 
               type="button"
               className="category-header" 
