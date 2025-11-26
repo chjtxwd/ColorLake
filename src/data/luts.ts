@@ -6,63 +6,63 @@ export const LUT_LIBRARY: LUTMeta[] = [
     "name": "acros",
     "file": "/LUTS/Fujifilm/acros.clut",
     "category": "Fujifilm",
-    "hash": "d039187e"
+    "hash": "0f8c2b6a"
   },
   {
     "id": "Fujifilm-brown",
     "name": "brown",
     "file": "/LUTS/Fujifilm/brown.clut",
     "category": "Fujifilm",
-    "hash": "1ef1d8a5"
+    "hash": "172fbfe8"
   },
   {
     "id": "Fujifilm-classic-Chrome",
     "name": "classic Chrome",
     "file": "/LUTS/Fujifilm/classic Chrome.clut",
     "category": "Fujifilm",
-    "hash": "1c2a44cf"
+    "hash": "d90afef6"
   },
   {
     "id": "Fujifilm-classic-NEG",
     "name": "classic NEG",
     "file": "/LUTS/Fujifilm/classic NEG.clut",
     "category": "Fujifilm",
-    "hash": "8f8560c0"
+    "hash": "7475e8f7"
   },
   {
     "id": "Fujifilm-ETERNA-Cinema",
     "name": "ETERNA Cinema",
     "file": "/LUTS/Fujifilm/ETERNA Cinema.clut",
     "category": "Fujifilm",
-    "hash": "49edd9ec"
+    "hash": "3f187cd2"
   },
   {
     "id": "Fujifilm-nostalgic-neg",
     "name": "nostalgic neg",
     "file": "/LUTS/Fujifilm/nostalgic neg.clut",
     "category": "Fujifilm",
-    "hash": "8d4b2181"
+    "hash": "f86291ff"
   },
   {
     "id": "Fujifilm-Pro-Neg-Std",
     "name": "Pro Neg Std",
     "file": "/LUTS/Fujifilm/Pro Neg Std.clut",
     "category": "Fujifilm",
-    "hash": "30dea3bd"
+    "hash": "2633a817"
   },
   {
     "id": "Fujifilm-Provia-Std",
     "name": "Provia Std",
     "file": "/LUTS/Fujifilm/Provia Std.clut",
     "category": "Fujifilm",
-    "hash": "b5bbf420"
+    "hash": "a014ebdc"
   },
   {
     "id": "Fujifilm-Reala-Ace",
     "name": "Reala Ace",
     "file": "/LUTS/Fujifilm/Reala Ace.clut",
     "category": "Fujifilm",
-    "hash": "a1ab7aea"
+    "hash": "c8026492"
   },
   {
     "id": "Landscape-LANDSCAPE-GRADE-01",
@@ -328,140 +328,147 @@ export const LUT_LIBRARY: LUTMeta[] = [
     "name": "非彩色",
     "file": "/LUTS/NIKON/非彩色.clut",
     "category": "NIKON",
-    "hash": "3823bee4"
+    "hash": "29c20382"
   },
   {
     "id": "NIKON-风景",
     "name": "风景",
     "file": "/LUTS/NIKON/风景.clut",
     "category": "NIKON",
-    "hash": "ff19e113"
+    "hash": "53e4e60c"
   },
   {
     "id": "NIKON-洁净",
     "name": "洁净",
     "file": "/LUTS/NIKON/洁净.clut",
     "category": "NIKON",
-    "hash": "b384f607"
+    "hash": "a2531f4e"
   },
   {
     "id": "NIKON-平滑",
     "name": "平滑",
     "file": "/LUTS/NIKON/平滑.clut",
     "category": "NIKON",
-    "hash": "be455cae"
+    "hash": "47ee3947"
   },
   {
     "id": "NIKON-人像",
     "name": "人像",
     "file": "/LUTS/NIKON/人像.clut",
     "category": "NIKON",
-    "hash": "78c4039c"
+    "hash": "ddb9ba3c"
   },
   {
     "id": "NIKON-鲜艳",
     "name": "鲜艳",
     "file": "/LUTS/NIKON/鲜艳.clut",
     "category": "NIKON",
-    "hash": "cfd51643"
+    "hash": "c400b9c6"
   },
   {
     "id": "NIKON-flexible-color",
     "name": "flexible color",
     "file": "/LUTS/NIKON/flexible color.clut",
     "category": "NIKON",
-    "hash": "3b47743f"
+    "hash": "e5552407"
   },
   {
-    "id": "Ricoh-Ricoh-Camera-Yellow",
-    "name": "Ricoh Camera Yellow",
-    "file": "/LUTS/Ricoh/Ricoh Camera Yellow.clut",
+    "id": "Ricoh-Cinema-Green",
+    "name": "Cinema Green",
+    "file": "/LUTS/Ricoh/Cinema Green.clut",
     "category": "Ricoh",
-    "hash": "20d9e345"
+    "hash": "49def943"
   },
   {
-    "id": "Ricoh-Ricoh-Cinema-Green",
-    "name": "Ricoh Cinema Green",
-    "file": "/LUTS/Ricoh/Ricoh Cinema Green.clut",
+    "id": "Ricoh-Cinema-Yellow",
+    "name": "Cinema Yellow",
+    "file": "/LUTS/Ricoh/Cinema Yellow.clut",
     "category": "Ricoh",
-    "hash": "cbf0100a"
+    "hash": "b6409317"
   },
   {
-    "id": "Ricoh-Ricoh-Negative-Film",
-    "name": "Ricoh Negative Film",
-    "file": "/LUTS/Ricoh/Ricoh Negative Film.clut",
+    "id": "Ricoh-Negative-Film",
+    "name": "Negative Film",
+    "file": "/LUTS/Ricoh/Negative Film.clut",
     "category": "Ricoh",
-    "hash": "fd90053e"
+    "hash": "b8a8e621"
   },
   {
-    "id": "Ricoh-Ricoh-Positive-Film",
-    "name": "Ricoh Positive Film",
-    "file": "/LUTS/Ricoh/Ricoh Positive Film.clut",
+    "id": "Ricoh-Positive-Film",
+    "name": "Positive Film",
+    "file": "/LUTS/Ricoh/Positive Film.clut",
     "category": "Ricoh",
-    "hash": "9a123909"
+    "hash": "b850d350"
   },
   {
     "id": "Sony-BW",
     "name": "BW",
     "file": "/LUTS/Sony/BW.clut",
     "category": "Sony",
-    "hash": "c6c2631a"
+    "hash": "fe64d745"
   },
   {
     "id": "Sony-FL",
     "name": "FL",
     "file": "/LUTS/Sony/FL.clut",
     "category": "Sony",
-    "hash": "52aa72dc"
+    "hash": "cd91df37"
   },
   {
     "id": "Sony-FL2",
     "name": "FL2",
     "file": "/LUTS/Sony/FL2.clut",
     "category": "Sony",
-    "hash": "f39b9e82"
+    "hash": "76525865"
   },
   {
     "id": "Sony-FL3",
     "name": "FL3",
     "file": "/LUTS/Sony/FL3.clut",
     "category": "Sony",
-    "hash": "5dc37ea3"
+    "hash": "fd878b68"
   },
   {
     "id": "Sony-IN",
     "name": "IN",
     "file": "/LUTS/Sony/IN.clut",
     "category": "Sony",
-    "hash": "64fb916c"
+    "hash": "fb697bde"
   },
   {
     "id": "Sony-NT",
     "name": "NT",
     "file": "/LUTS/Sony/NT.clut",
     "category": "Sony",
-    "hash": "1d79360e"
+    "hash": "71e439ee"
   },
   {
     "id": "Sony-PT",
     "name": "PT",
     "file": "/LUTS/Sony/PT.clut",
     "category": "Sony",
-    "hash": "3845acaa"
+    "hash": "6be0f034"
   },
   {
     "id": "Sony-SH",
     "name": "SH",
     "file": "/LUTS/Sony/SH.clut",
     "category": "Sony",
-    "hash": "e7393a3d"
+    "hash": "039655ae"
   },
   {
     "id": "Sony-VV",
     "name": "VV",
     "file": "/LUTS/Sony/VV.clut",
     "category": "Sony",
-    "hash": "018492e1"
+    "hash": "19c8b4e0"
+  },
+  {
+    "id": "Sony-VV2",
+    "name": "VV2",
+    "file": "/LUTS/Sony/VV2.clut",
+    "category": "Sony",
+    "hash": "8f6df934"
   }
 ];
 

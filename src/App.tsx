@@ -3,7 +3,7 @@ import { ImageUploader } from './components/ImageUploader';
 import { ImageSelector } from './components/ImageSelector';
 import { PreviewGrid } from './components/PreviewGrid';
 import { EmptyState } from './components/EmptyState';
-import { CompareSlider } from './components/CompareSlider';
+import { CompareSliderWithZoom } from './components/CompareSliderWithZoom';
 import { LUT_LIBRARY } from './data/luts';
 import type { LUTMeta, UploadedImage } from './types';
 import { imageProcessor } from './utils/imageProcessor';
@@ -114,7 +114,7 @@ export default function App() {
                   {isProcessing ? '处理中...' : '导出全尺寸照片'}
                 </button>
               </div>
-              <CompareSlider
+              <CompareSliderWithZoom
                 imageUrl={activeImage.originalUrl}
                 imageWidth={activeImage.originalWidth}
                 imageHeight={activeImage.originalHeight}

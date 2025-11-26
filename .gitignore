@@ -128,5 +128,6 @@ Thumbs.db
 scripts/3dlut-creator
 scripts/sample
 /LUTS
+/LUTS_old
 
 dist.zip

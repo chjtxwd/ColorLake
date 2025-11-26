@@ -2,8 +2,11 @@ import { LUTMeta, UploadedImage } from '../types';
 import { loadLUT } from '../hooks/useLUTData';
 import { LUTCanvasRenderer } from './webglRenderer';
 
+// Detect if running on mobile device
+const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 // iOS Safari has strict memory limits for canvas
-// Maximum safe dimensions to prevent crashes
+// Maximum safe dimensions to prevent crashes on mobile devices
 const MAX_CANVAS_PIXELS = 16777216; // 4096x4096, safe for most iOS devices
 const MAX_DIMENSION = 4096;
 
@@ -66,9 +69,9 @@ function showImagePreview(imageUrl: string, filename: string, onClose: () => voi
       <small style="opacity: 0.8; font-size: 0.9rem;">或点击下方按钮分享/下载</small>
     `
     : `
-      <div style="font-size: 1.3rem; margin-bottom: 0.5rem;">📸</div>
-      <strong style="font-size: 1.1rem;">右键图片另存为</strong><br>
-      <small style="opacity: 0.8; font-size: 0.9rem;">或点击下方按钮下载</small>
+      <div style="font-size: 1.3rem; margin-bottom: 0.5rem;">💾</div>
+      <strong style="font-size: 1.1rem;">点击下载按钮保存</strong><br>
+      <small style="opacity: 0.8; font-size: 0.9rem;">或右键图片另存为</small>
     `;
   
   // Create image
@@ -111,6 +114,59 @@ function showImagePreview(imageUrl: string, filename: string, onClose: () => voi
     userAgent: navigator.userAgent,
     canShare
   });
+  
+  // Create download button - primary button for PC
+  const downloadBtn = document.createElement('button');
+  downloadBtn.textContent = '💾 下载';
+  
+  // On PC, download is the primary action; on mobile, it's secondary
+  if (isMobile) {
+    downloadBtn.style.cssText = `
+      flex: 1;
+      padding: 0.875rem 1.5rem;
+      background: rgba(0, 123, 255, 0.8);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.1s, background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    `;
+  } else {
+    downloadBtn.style.cssText = `
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.1s, opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    `;
+  }
+  
+  downloadBtn.onclick = () => {
+    const a = document.createElement('a');
+    a.href = imageUrl;
+    a.download = filename;
+    a.click();
+  };
+  downloadBtn.ontouchstart = () => {
+    downloadBtn.style.transform = 'scale(0.95)';
+  };
+  downloadBtn.ontouchend = () => {
+    downloadBtn.style.transform = 'scale(1)';
+  };
+  
+  // On PC, add download button first; on mobile, add share button first
+  if (!isMobile) {
+    buttonContainer.appendChild(downloadBtn);
+  }
   
   // Create share button (for mobile with Web Share API)
   if (canShare) {
@@ -156,7 +212,10 @@ function showImagePreview(imageUrl: string, filename: string, onClose: () => voi
     shareBtn.ontouchend = () => {
       shareBtn.style.transform = 'scale(1)';
     };
-    buttonContainer.appendChild(shareBtn);
+    
+    if (isMobile) {
+      buttonContainer.appendChild(shareBtn);
+    }
   }
   
   // Secondary buttons row
@@ -166,34 +225,10 @@ function showImagePreview(imageUrl: string, filename: string, onClose: () => voi
     gap: 0.75rem;
   `;
   
-  // Create download button
-  const downloadBtn = document.createElement('button');
-  downloadBtn.textContent = '💾 下载';
-  downloadBtn.style.cssText = `
-    flex: 1;
-    padding: 0.875rem 1.5rem;
-    background: rgba(0, 123, 255, 0.8);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.1s, background 0.2s;
-    -webkit-tap-highlight-color: transparent;
-  `;
-  downloadBtn.onclick = () => {
-    const a = document.createElement('a');
-    a.href = imageUrl;
-    a.download = filename;
-    a.click();
-  };
-  downloadBtn.ontouchstart = () => {
-    downloadBtn.style.transform = 'scale(0.95)';
-  };
-  downloadBtn.ontouchend = () => {
-    downloadBtn.style.transform = 'scale(1)';
-  };
+  // On mobile, add download button to secondary row
+  if (isMobile) {
+    secondaryRow.appendChild(downloadBtn);
+  }
   
   // Create close button
   const closeBtn = document.createElement('button');
@@ -229,9 +264,17 @@ function showImagePreview(imageUrl: string, filename: string, onClose: () => voi
     closeBtn.style.transform = 'scale(1)';
   };
   
-  secondaryRow.appendChild(downloadBtn);
+  // On mobile, add both download and close to secondary row
+  // On PC, only add close button (download is already primary)
+  if (isMobile) {
+    secondaryRow.appendChild(downloadBtn);
+  }
   secondaryRow.appendChild(closeBtn);
-  buttonContainer.appendChild(secondaryRow);
+  
+  // Only add secondary row if it has content
+  if (secondaryRow.children.length > 0) {
+    buttonContainer.appendChild(secondaryRow);
+  }
   
   overlay.appendChild(instruction);
   overlay.appendChild(img);
@@ -248,9 +291,14 @@ function showImagePreview(imageUrl: string, filename: string, onClose: () => voi
 }
 
 function getSafeDimensions(width: number, height: number): { width: number, height: number, scale: number } {
+  // On PC/Desktop, allow full resolution export
+  if (!isMobileDevice) {
+    return { width, height, scale: 1 };
+  }
+  
+  // On mobile devices, check if dimensions exceed max size
   const totalPixels = width * height;
   
-  // Check if dimensions exceed max size
   if (width <= MAX_DIMENSION && height <= MAX_DIMENSION && totalPixels <= MAX_CANVAS_PIXELS) {
     return { width, height, scale: 1 };
   }
