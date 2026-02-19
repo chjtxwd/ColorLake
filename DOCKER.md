@@ -280,7 +280,7 @@ ghcr.io/chjtxwd/colorlake:v1.0.0  (如果使用版本标签 / if using version t
 
 By default, images pushed to ghcr.io may be private. To make them public:
 
-1. 访问 / Go to: https://github.com/orgs/YOUR_ORG/packages
+1. 访问包管理页面 / Go to: https://github.com/chjtxwd?tab=packages
 2. 找到 colorlake 包 / Find the colorlake package
 3. 在包设置中将可见性更改为 Public / Change visibility to Public in package settings
 
