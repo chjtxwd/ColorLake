@@ -4,6 +4,44 @@
 
 This document explains how to build and deploy the ColorLake application using Docker.
 
+## GitHub Actions 自动构建 / Automated Build with GitHub Actions
+
+本项目已配置 GitHub Actions 工作流，可自动构建多架构（ARM64 和 AMD64）Docker 镜像并推送到 GitHub Container Registry。
+
+This project is configured with GitHub Actions workflow to automatically build multi-architecture (ARM64 and AMD64) Docker images and push them to GitHub Container Registry.
+
+### 触发条件 / Trigger Conditions
+
+工作流在以下情况下自动触发 / The workflow is automatically triggered when:
+
+- 推送到 `main` 或 `master` 分支 / Push to `main` or `master` branch
+- 创建版本标签（如 `v1.0.0`）/ Create a version tag (e.g., `v1.0.0`)
+- 创建 Pull Request / Create a Pull Request (仅构建，不推送 / build only, no push)
+- 手动触发工作流 / Manually trigger the workflow
+
+### 使用 GitHub 镜像 / Using GitHub Container Registry Images
+
+```bash
+# 拉取最新镜像 / Pull the latest image
+docker pull ghcr.io/chjtxwd/colorlake:latest
+
+# 运行容器 / Run container
+docker run -d -p 8080:80 --name colorlake ghcr.io/chjtxwd/colorlake:latest
+
+# 拉取特定版本 / Pull a specific version
+docker pull ghcr.io/chjtxwd/colorlake:v1.0.0
+```
+
+### 多架构支持 / Multi-Architecture Support
+
+镜像支持以下架构 / The images support the following architectures:
+- `linux/amd64` (x86_64)
+- `linux/arm64` (ARM64/aarch64)
+
+Docker 会自动选择与您的系统架构匹配的镜像。
+
+Docker will automatically select the image that matches your system architecture.
+
 ## 构建 Docker 镜像 / Build Docker Image
 
 ```bash
@@ -124,7 +162,21 @@ docker run -d \
   colorlake:production
 ```
 
-### 方式 2: 推送到镜像仓库 / Method 2: Push to Registry
+### 方式 2: 使用 GitHub Container Registry / Method 2: Use GitHub Container Registry
+
+```bash
+# 拉取镜像 / Pull the image
+docker pull ghcr.io/chjtxwd/colorlake:latest
+
+# 运行生产容器 / Run production container
+docker run -d \
+  -p 80:80 \
+  --name colorlake-prod \
+  --restart unless-stopped \
+  ghcr.io/chjtxwd/colorlake:latest
+```
+
+### 方式 3: 推送到自定义镜像仓库 / Method 3: Push to Custom Registry
 
 ```bash
 # 标记镜像 / Tag the image
@@ -177,8 +229,64 @@ docker run -d -p 3000:80 --name colorlake colorlake:latest
 3. 配置适当的 Nginx 缓存策略
 4. 考虑使用 CDN 加速静态资源访问
 
+## GitHub Actions 工作流详情 / GitHub Actions Workflow Details
+
+### 工作流文件 / Workflow File
+
+工作流配置文件位于 `.github/workflows/docker-build-push.yml`
+
+The workflow configuration is located at `.github/workflows/docker-build-push.yml`
+
+### 功能特性 / Features
+
+- ✅ 支持多架构构建（AMD64 和 ARM64）/ Multi-architecture build support (AMD64 and ARM64)
+- ✅ 使用 QEMU 进行跨平台构建 / Cross-platform build using QEMU
+- ✅ 推送到 GitHub Container Registry (ghcr.io)
+- ✅ 自动生成镜像标签和元数据 / Automatic image tags and metadata generation
+- ✅ GitHub Actions 缓存优化构建速度 / Build speed optimization with GitHub Actions cache
+- ✅ Pull Request 仅构建，不推送 / Pull Request builds without pushing
+
+### 镜像标签策略 / Image Tagging Strategy
+
+工作流会根据触发事件自动生成标签 / The workflow automatically generates tags based on trigger events:
+
+- 推送到默认分支（main/master）/ Push to default branch: `latest`
+- 推送到其他分支 / Push to other branches: `<branch-name>`
+- 版本标签 / Version tags: `v1.2.3`, `1.2`, `1`
+- Pull Request: `pr-<number>`
+
+### 手动触发工作流 / Manually Trigger Workflow
+
+1. 访问 GitHub 仓库的 Actions 标签页 / Go to the Actions tab in your GitHub repository
+2. 选择 "Build and Push Docker Image" 工作流 / Select the "Build and Push Docker Image" workflow
+3. 点击 "Run workflow" 按钮 / Click the "Run workflow" button
+4. 选择分支并启动 / Select the branch and start
+
+### 访问镜像 / Accessing Images
+
+构建完成后，镜像会被推送到 GitHub Container Registry：
+
+After the build completes, images are pushed to GitHub Container Registry:
+
+```
+ghcr.io/chjtxwd/colorlake:latest
+ghcr.io/chjtxwd/colorlake:main
+ghcr.io/chjtxwd/colorlake:v1.0.0  (如果使用版本标签 / if using version tags)
+```
+
+### 设置镜像可见性 / Setting Image Visibility
+
+默认情况下，推送到 ghcr.io 的镜像可能是私有的。要将其设为公开：
+
+By default, images pushed to ghcr.io may be private. To make them public:
+
+1. 访问 / Go to: https://github.com/orgs/YOUR_ORG/packages
+2. 找到 colorlake 包 / Find the colorlake package
+3. 在包设置中将可见性更改为 Public / Change visibility to Public in package settings
+
 ## 相关文档 / Related Documentation
 
 - [Docker 官方文档](https://docs.docker.com/)
 - [Nginx 官方文档](https://nginx.org/en/docs/)
 - [Vite 部署指南](https://vitejs.dev/guide/static-deploy.html)
+- [GitHub Container Registry 文档](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
