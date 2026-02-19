@@ -49,8 +49,3 @@ scripts/3dlut-creator
 scripts/sample
 /LUTS
 /LUTS_old
-
-# Docker
-Dockerfile
-.dockerignore
-docker-compose.yml
