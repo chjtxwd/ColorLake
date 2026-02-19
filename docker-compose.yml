@@ -1,0 +1,10 @@
+services:
+  colorlake:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: colorlake:latest
+    container_name: colorlake
+    ports:
+      - "8080:80"
+    restart: unless-stopped
