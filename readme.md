@@ -37,6 +37,20 @@ npm run preview
 ```
 `npm run build` 会输出打包好的静态文件，`npm run preview` 可本地验证生产版本。
 
+### Docker 部署
+使用 Docker 可以快速构建和部署应用：
+```bash
+# 构建镜像
+docker build -t colorlake:latest .
+
+# 运行容器
+docker run -d -p 8080:80 --name colorlake colorlake:latest
+
+# 或使用 docker-compose
+docker-compose up -d
+```
+详细的 Docker 使用说明请参考 [DOCKER.md](./DOCKER.md)。
+
 ### 自定义 LUT
 1. 将新的 `.cube` 文件放入 `public/LUTS`（支持包含空格的文件名）。
 2. 若需要展示顺序不同，可在 `src/data/luts.ts` 中调整数组顺序或增删条目。
